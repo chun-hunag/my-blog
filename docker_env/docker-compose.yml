@@ -1,0 +1,26 @@
+version: "3"
+networks:
+  mynet:
+    driver: ${NETWORKS_DRIVER}
+services:
+  nginx:
+    restart: unless-stopped
+    image: nginx:latest
+    container_name: nginx
+    networks:
+      - mynet
+    ports:
+      - 80:80
+      - 443:443
+  php-fpm74:
+    image: php:7.4.3-fpm
+    environment:
+      - OPCACHE_ENABLE=${OPCACHE_ENABLE}
+      - OPCACHE_ENABLE_CLI=${OPCACHE_ENABLE_CLI}
+    container_name: php74
+    restart: unless-stopped
+    networks:
+      - mynet
+    volumes:
+      - ./php-fpm/php7.2.ini:/usr/local/etc/php/php.ini
+      - ${APP_CODE_PATH_HOST}:${NGINX_DOCUMENT_ROOT}${APP_CODE_CONTAINER_FLAG}
