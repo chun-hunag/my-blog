@@ -1,0 +1,92 @@
+version: "3"
+networks:
+  mynet:
+    driver: ${NETWORKS_DRIVER}
+services:
+  nginx:
+    restart: unless-stopped
+    image: nginx:latest
+    container_name: nginx
+    networks:
+      - mynet
+    ports:
+      - 80:80
+      - 443:443
+  php-fpm74:
+    image: chunhuanghuang/php-fpm74_dev
+    environment:
+      - OPCACHE_ENABLE=${OPCACHE_ENABLE}
+      - OPCACHE_ENABLE_CLI=${OPCACHE_ENABLE_CLI}
+    container_name: php74
+    restart: unless-stopped
+    networks:
+      - mynet
+    volumes:
+      - .\php-fpm\php7.4.ini:/usr/local/etc/php/conf.d/php.ini
+      - ${APP_CODE_PATH_HOST}:${NGINX_DOCUMENT_ROOT}${APP_CODE_CONTAINER_FLAG}
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - ${MYSQL_LOCAL_PORT}:3306
+    restart: always
+    volumes:
+      - ${MYSQL_LOCAL_DATA}:/var/lib/mysql
+    networks:
+      - mynet
+  redis:
+    image: redis:${REDIS_VERSION}
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - mynet
+  es01:
+    build:
+      context: ./elasticsearch
+      args:
+        - ELK_VERSION=${ELK_VERSION}
+    ports:
+      - ${ELASTICSEARCH_HOST_HTTP_PORT}:9200
+      - ${ELASTICSEARCH_HOST_TRANSPORT_PORT}:9300
+    environment:
+      - cluster.name=my-blog-cluster
+      - node.name=es01
+      - node.master=true
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+    volumes:
+      - ${ELASEICSEARCH_LOCAL_PATH}/elasticsearch:/usr/share/elasticsearch/data
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    networks:
+      - mynet
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    depends_on:
+      - es01
+    ports:
+      - 5601:5601
+    networks:
+      - mynet
+  node:
+    build:
+      context: ./node
+      args:
+        - NODE_VERSION=${NODE_VERSION}
+    volumes:
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+    networks:
+      - mynet
