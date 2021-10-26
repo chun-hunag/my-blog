@@ -7,11 +7,16 @@ services:
     restart: unless-stopped
     image: nginx:latest
     container_name: nginx
-    networks:
-      - mynet
     ports:
       - 80:80
       - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d # nginx site config
+      - ./nginx/log:/var/log/nginx # log dir
+      - ${APP_CODE_PATH_HOST}:${NGINX_DOCUMENT_ROOT}
+      #- ./php-fpm/php7.4-fpm.sock:/var/run/php/php7.4-fpm.sock
+    networks:
+      - mynet
   php-fpm74:
     image: chunhuanghuang/php-fpm74_dev
     environment:
@@ -19,6 +24,8 @@ services:
       - OPCACHE_ENABLE_CLI=${OPCACHE_ENABLE_CLI}
     container_name: php74
     restart: unless-stopped
+    expose:
+      - "9000"
     networks:
       - mynet
     volumes:

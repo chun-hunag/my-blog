@@ -1,4 +1,4 @@
 .env
 logs/*
-docker_env/databases/*
-docker_env/.env
+docker/databases/*
+docker/.env
