@@ -1,4 +1,4 @@
 ARG NODE_VERSION
 FROM node:${NODE_VERSION}
-WORKDIR /var/www/html/src/frontend/
+WORKDIR /var/www/html/frontend/
 CMD tail -f /dev/null

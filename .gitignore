@@ -2,3 +2,5 @@
 logs/*
 docker/databases/*
 docker/.env
+docker/nginx/log/*
+*.log
