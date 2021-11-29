@@ -1,7 +1,7 @@
 <template>
     <div id="wrapper">
-        <Header/>
         <div id="body-wrapper">
+            <Header/>
             <div id="content-wrapper">
                 <Sidebar/>
                 <router-view />
@@ -49,12 +49,13 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 #content-wrapper {
     height: 75vh;
     width: 100%;
-    max-width: 960px;
+    max-width: 1100px;
     display: flex;
     flex-direction: row;
 }
