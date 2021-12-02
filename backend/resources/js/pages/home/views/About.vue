@@ -1,11 +1,12 @@
 <template>
     <div id="about-wrapper">
-        <Markdown :source='source' />
+        <Markdown :source="source" />
     </div>
 </template>
 
 <script>
 import Markdown from 'vue3-markdown-it';
+// import selfIntroduction from '/statics/markdown/self-introduction.md';
 
 export default {
     name: "About",
@@ -14,10 +15,25 @@ export default {
     },
     data() {
         return{
-            source: "# Test \n---\n## 12345",
-
+            path: '/statics/markdown/self-introduction.md',
+            source: ''
         }
     },
+    setup() {
+        function readSelfIntroductionAndSetSource(path) {
+            return fetch(path)
+                .then(function(response) {
+                    return response.text();
+                }).then(data => this.source = data);
+        }
+
+        return {
+            readSelfIntroductionAndSetSource
+        };
+    },
+    created() {
+        this.readSelfIntroductionAndSetSource(this.path);
+    }
 }
 </script>
 

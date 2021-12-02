@@ -22729,6 +22729,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue3_markdown_it__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue3-markdown-it */ "./node_modules/vue3-markdown-it/dist/vue3-markdown-it.umd.min.js");
 /* harmony import */ var vue3_markdown_it__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue3_markdown_it__WEBPACK_IMPORTED_MODULE_0__);
+ // import selfIntroduction from '/statics/markdown/self-introduction.md';
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "About",
@@ -22737,8 +22738,27 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      source: "# Test \n---\n## 12345"
+      path: '/statics/markdown/self-introduction.md',
+      source: ''
     };
+  },
+  setup: function setup() {
+    function readSelfIntroductionAndSetSource(path) {
+      var _this = this;
+
+      return fetch(path).then(function (response) {
+        return response.text();
+      }).then(function (data) {
+        return _this.source = data;
+      });
+    }
+
+    return {
+      readSelfIntroductionAndSetSource: readSelfIntroductionAndSetSource
+    };
+  },
+  created: function created() {
+    this.readSelfIntroductionAndSetSource(this.path);
   }
 });
 
