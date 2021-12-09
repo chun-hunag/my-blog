@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Index from '../views/Index'
 import About from '../views/About'
 import Articles from '../views/Articles'
-
+import Article from '../views/Article'
 
 const routes = [
     {
@@ -35,6 +35,16 @@ const routes = [
             requiresAuth: false
         }
     },
+    {
+        path: '/article',
+        name: 'Article',
+        component: Article,
+        meta: {
+            title: 'Article',
+            keepAlive: true,
+            requiresAuth: false
+        }
+    }
     // {
     //     // 会匹配所有路径
     //     path: '/:pathMatch(.*)*',
