@@ -7,7 +7,6 @@
 
 <script>
 import Markdown from 'vue3-markdown-it';
-// import selfIntroduction from '/statics/markdown/self-introduction.md';
 
 export default {
     name: "About",
@@ -47,6 +46,13 @@ export default {
     width: 100%;
     text-align: center;
     font-size: 64px;
+}
+@media (max-width: 415px) {
+    #about-title {
+        width: 100%;
+        text-align: center;
+        font-size: 32px;
+    }
 }
 
 </style>
