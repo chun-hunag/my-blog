@@ -1,5 +1,6 @@
 <template>
     <div id="about-wrapper">
+        <div id="about-title">About Me</div>
         <Markdown :source="source" />
     </div>
 </template>
@@ -38,5 +39,14 @@ export default {
 </script>
 
 <style scoped>
+#about-wrapper {
+    width: 100%;
+}
+
+#about-title {
+    width: 100%;
+    text-align: center;
+    font-size: 64px;
+}
 
 </style>
