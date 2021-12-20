@@ -1,6 +1,6 @@
 <template>
     <div id="index-wrapper">
-        <div id="article" v-for="article in articles">
+        <div id="article" v-for="article in articles" @click="goArticle()">
             <div id="title">{{article.title}}</div>
             <div id="markdown-wrapper">
                 <Markdown :source="article.previewContent" />
@@ -19,6 +19,7 @@
 <script>
 
 import Markdown from 'vue3-markdown-it';
+import { useRouter } from "vue-router";
 export default {
     components: {
         Markdown
@@ -62,6 +63,8 @@ export default {
         };
     },
     setup() {
+        const router = useRouter();
+
         function timestampToDate(timestamp) {
             let date = new Date(timestamp * 1000);
             let year = date.getFullYear();
@@ -70,8 +73,12 @@ export default {
             return year + '/' + month + '/' + day;
         }
 
+        function goArticle() {
+            router.push({ name: "Article"})
+        }
+
         return {
-            timestampToDate
+            timestampToDate, goArticle
         };
     }
 }
